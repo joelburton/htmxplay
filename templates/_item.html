@@ -1,0 +1,11 @@
+<li>
+  <b>{{ item.title }}</b>
+  <i>({{ item.priority }})</i>
+  <small>{{item._id}}</small>
+  <button
+      hx-delete="/items/{{ item._id }}"
+      hx-swap="outerHTML"
+      hx-target="closest li"
+      hx-confirm="Are you sure?"
+  >X</button>
+</li>

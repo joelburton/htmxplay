@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To Do</title>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+
+<ul id="todos">
+  {% for item in items %}
+    {% include "_item.html" %}
+  {% endfor %}
+</ul>
+
+<form
+    hx-post="/items"
+    hx-swap="beforeend"
+    hx-target="#todos"
+    hx-on::after-request="this.reset()"
+>
+  <label>Title: <input name="title"></label>
+  <label>Priority: <input name="priority" type="number"></label>
+  <button>Add</button>
+</form>
+
+</body>
+</html>
