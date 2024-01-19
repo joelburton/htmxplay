@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, make_response
 from flask_cors import CORS
 from flask_pymongo import PyMongo
 
@@ -19,8 +19,16 @@ def show_item(id):
 
 @app.post("/items")
 def post_item():
+    if int(request.form["priority"]) > 5:
+        # one way to handle errors: special headers for htmx
+        headers = {'HX-Retarget': '#err', 'HX-Reswap': 'innerhtml'}
+        return "Bad priority", 200, headers
+    if request.form["priority"] == "0":
+        # other: return err status code, have event handler in html
+        return "Priority zero meltdown", 400
     id = todos.insert_one({**request.form}).inserted_id
-    return show_item(id)
+    item = todos.find_one({"_id": id})
+    return render_template("_item.html", item=item), 201
 
 @app.delete("/items/<ObjectId:id>")
 def delete_item(id):

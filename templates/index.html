@@ -11,11 +11,13 @@
     hx-post="/items"
     hx-swap="beforeend"
     hx-target="#todos"
-    hx-on::after-request="this.reset()"
->
-  <label>Title: <input name="title"></label>
-  <label>Priority: <input name="priority" type="number"></label>
+    hx-on:input="err.innerHTML=''"
+    hx-on::response-error="alert(`Err: ${event.detail.xhr.response}`)"
+    hx-on::after-request="event.detail.xhr.status === 201 && this.reset()">
+  Title: <input name="title">
+  Priority: <input name="priority" type="number">
   <button>Add</button>
+  <div id="err" style="color: darkred">{{ err }}</div>
 </form>
 </body>
 </html>
